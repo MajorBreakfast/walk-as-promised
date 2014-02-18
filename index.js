@@ -5,7 +5,7 @@ var walkSync = require('walk-sync'),
     walkAsPromisedCStyle = require('./walk-c-style');
 
 
-var folder = __dirname + '/../';
+var folder = __dirname + '/';
 
 
 // Note: first one always runs slower!

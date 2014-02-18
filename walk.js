@@ -9,6 +9,9 @@ function walk(baseDir, relativePath) {
 
   if (relativePath == null) { relativePath = '' }
 
+  // Remove trailing slash
+  if (relativePath[relativePath.length -1] === '/') { relativePath = relativePath.slice(0, -1); }
+
   function fly(baseDir, relativePath) {
     return stat(baseDir + '/' + relativePath)
       .then(function(status) {
