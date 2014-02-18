@@ -17,7 +17,7 @@ function walk(baseDir, relativePath) {
         return stat(baseDir + '/' + relativePath + entry);
       });
 
-      return RSVP.all(statPromises)
+      return Promise.all(statPromises)
         .then(function(stati) {
           for (var i = 0; i < entries.length; i++) {
             if (stati[i].isDirectory()) {
@@ -27,7 +27,7 @@ function walk(baseDir, relativePath) {
             }
           };
 
-          return RSVP.all(folderPromises);
+          return Promise.all(folderPromises);
         })
         .then(function(subentries) {
 
