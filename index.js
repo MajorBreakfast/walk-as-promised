@@ -5,7 +5,7 @@ var walkSync = require('walk-sync'),
     walkAsPromisedCStyle = require('./walk-c-style');
 
 
-var folder = __dirname + '/';
+var folder = __dirname + '/../';
 
 
 // Note: first one always runs slower!
@@ -22,6 +22,7 @@ function runWalkSync() {
   var start = Date.now();
   var result = walkSync(folder, '/');
   console.log('Sync took ' + (Date.now() - start) + ' ms');
+  console.log(result.length);
 }
 
 function runWalkAsPromised() {
@@ -29,6 +30,7 @@ function runWalkAsPromised() {
   return walkAsPromised(folder, '/')
   .then(function(result) {
     console.log('walkAsPromised took ' + (Date.now() - start) + ' ms');
+    console.log(result.length);
   });
 }
 
@@ -37,5 +39,6 @@ function runWalkAsPromisedCStyle() {
   return walkAsPromisedCStyle(folder, '/')
   .then(function(result) {
     console.log('walkAsPromisedCStyle took ' + (Date.now() - start) + ' ms');
+    console.log(result.length);
   });
 }
