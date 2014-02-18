@@ -1,0 +1,12 @@
+{
+  "name": "walk-as-promised",
+  "version": "0.0.1",
+  "author": "Josef Brandl",
+  "description": "",
+  "main": "walk.js",
+  "license": "MIT",
+  "dependencies": {
+    "rsvp": "~3.0.4",
+    "walk-sync": "0.0.1"
+  }
+}
