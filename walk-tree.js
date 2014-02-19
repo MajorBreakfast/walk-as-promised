@@ -1,4 +1,4 @@
-var fs = require('graceful-fs'),
+var fs = require('fs'),
     RSVP = require('rsvp');
 
 module.exports = walk;
@@ -17,6 +17,9 @@ function walk(dir, options) {
 
   var fsReaddir = options.sync ? fsReaddirSync : fs.readdir;
   var fsStat = options.sync ? fsStatSync : fs.stat;
+  var before = RSVP.denodeify(options.before || function(cb) { cb(); });
+  var after = RSVP.denodeify(options.after || function(r, cb) { cb(r); });
+
 
   function fly(relativePath, j, callback) {
     // Note: j is just an index that gets passed through (Needed for recursive calling)
@@ -59,21 +62,10 @@ function walk(dir, options) {
     });
   };
 
-  return RSVP.denodeify(fly)('', null);
+
+  return before().then(function() { return RSVP.denodeify(fly)('', null); })
+    .then(function(r) { return RSVP.resolve(r); });
 };
 
-function fsReaddirSync(file, callback) {
-  try {
-    callback(null, fs.readdirSync(file));
-  } catch (err) {
-    callback(err);
-  }
-}
-
-function fsStatSync(file, callback) {
-  try {
-    callback(null, fs.statSync(file))
-  } catch (err) {
-    callback(err);
-  }
-}
+function fsReaddirSync(file, cb) { cb(null, fs.readdirSync(file)); }
+function fsStatSync(file, cb) { cb(null, fs.statSync(file)) }
