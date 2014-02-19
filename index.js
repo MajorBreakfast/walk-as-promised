@@ -4,6 +4,7 @@ var walkSync = require('walk-sync'),
     walkAsPromised = require('./walk-promises'),
     walkAsPromisedCStyle = require('./walk-c-style'),
     walkFlattenAfterwards = require('./walk-flatten-afterwards'),
+    walkCallbacksFlattenAfterwards = require('./walk-callbacks-flatten-afterwards'),
     walkCallbacks = require('./walk');
 
 
@@ -17,11 +18,13 @@ RSVP.resolve()
 .then(runWalkAsPromised)
 .then(runWalkAsPromisedCStyle)
 .then(runWalkFlattenAfterwards)
+.then(runWalkCallbacksFlattenAfterwards)
 .then(runWalkCallbacks)
 .then(runWalkSync)
 .then(runWalkAsPromised)
 .then(runWalkAsPromisedCStyle)
 .then(runWalkFlattenAfterwards)
+.then(runWalkCallbacksFlattenAfterwards)
 .then(runWalkCallbacks)
 
 function runWalkSync() {
@@ -51,6 +54,14 @@ function runWalkFlattenAfterwards() {
   return walkFlattenAfterwards(folder, '/')
   .then(function(result) {
     console.log('walkFlattenAfterwards took ' + (Date.now() - start) + ' ms for ' + result.length + ' files');
+  });
+}
+
+function runWalkCallbacksFlattenAfterwards() {
+  var start = Date.now()
+  return walkCallbacksFlattenAfterwards(folder, '/')
+  .then(function(result) {
+    console.log('walkCallbacksFlattenAfterwards took ' + (Date.now() - start) + ' ms for ' + result.length + ' files');
   });
 }
 

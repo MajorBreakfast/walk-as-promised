@@ -1,4 +1,5 @@
 var fs = require('fs'),
+    _ = require('lodash'),
     RSVP = require('rsvp');
 
 module.exports = walk;
@@ -24,17 +25,17 @@ function walk(baseDir, relativePath) {
                 entries[i] = subentries;
                 entriesLeft -= 1;
                 if (entriesLeft === 0) {
-                  callback(null, Array.prototype.concat.apply([relativePath + '/'], entries), j);
+                  callback(null, [relativePath + '/', entries], j);
                 }
               });
             };
-          } else { callback(null, [relativePath + '/'], j) } // Empty folder
+          } else { callback(null, relativePath + '/', j) } // Empty folder
         })
 
-      } else { callback(null, [relativePath], j); } // File
+      } else { callback(null, relativePath, j); } // File
 
     });
   };
 
-  return RSVP.denodeify(fly)(relativePath, 0)
+  return RSVP.denodeify(fly)(relativePath, 0).then(_.flatten)
 };
