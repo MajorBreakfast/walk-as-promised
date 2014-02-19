@@ -18,7 +18,7 @@ function walk(dir, options) {
   var fsReaddir = options.sync ? fsReaddirSync : fs.readdir;
   var fsStat = options.sync ? fsStatSync : fs.stat;
   var before = RSVP.denodeify(options.before || function(cb) { cb(); });
-  var after = RSVP.denodeify(options.after || function(r, cb) { cb(r); });
+  var after = RSVP.denodeify(options.after || function(r, cb) { cb(null, r); });
 
 
   function fly(relativePath, j, callback) {
@@ -63,8 +63,7 @@ function walk(dir, options) {
   };
 
 
-  return before().then(function() { return RSVP.denodeify(fly)('', null); })
-    .then(function(r) { return RSVP.resolve(r); });
+  return before().then(function() { return RSVP.denodeify(fly)('', null); }).then(after);
 };
 
 function fsReaddirSync(file, cb) { cb(null, fs.readdirSync(file)); }

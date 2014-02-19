@@ -1,6 +1,6 @@
 {
   "name": "walk-tree-as-promised",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "Josef Brandl",
   "description": "",
   "main": "walk-tree.js",
