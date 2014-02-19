@@ -13,19 +13,25 @@ var folder = __dirname + '/../';
 
 // Note: first one always runs slower!
 
-RSVP.resolve()
-.then(runWalkSync)
-.then(runWalkAsPromised)
-.then(runWalkAsPromisedCStyle)
-.then(runWalkFlattenAfterwards)
-.then(runWalkCallbacksFlattenAfterwards)
-.then(runWalkCallbacks)
-.then(runWalkSync)
-.then(runWalkAsPromised)
-.then(runWalkAsPromisedCStyle)
-.then(runWalkFlattenAfterwards)
-.then(runWalkCallbacksFlattenAfterwards)
-.then(runWalkCallbacks)
+
+
+(function testAll() {
+  return RSVP.resolve()
+  .then(runWalkSync)
+  .then(runWalkAsPromised)
+  .then(runWalkAsPromisedCStyle)
+  .then(runWalkFlattenAfterwards)
+  .then(runWalkCallbacksFlattenAfterwards)
+  .then(runWalkCallbacks)
+  .then(testAll);
+});
+
+(function test() {
+  return RSVP.resolve()
+  .then(runWalkSync)
+  .then(runWalkCallbacks)
+  .then(test)
+})();
 
 function runWalkSync() {
   var start = Date.now();
