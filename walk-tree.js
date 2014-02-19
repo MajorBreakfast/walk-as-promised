@@ -1,4 +1,4 @@
-var fs = require('fs'),
+var fs = require('graceful-fs'),
     RSVP = require('rsvp');
 
 module.exports = walk;
@@ -15,14 +15,19 @@ function walk(dir, options) {
       callback(null, [relativePath]);
     }
 
+  var fsReaddir = options.sync ? fsReaddirSync : fs.readdir;
+  var fsStat = options.sync ? fsStatSync : fs.stat;
+
   function fly(relativePath, j, callback) {
     // Note: j is just an index that gets passed through (Needed for recursive calling)
 
-    fs.stat(dir + '/' + relativePath, function(err, stat) {
+    fsStat(dir + '/' + relativePath, function(err, stat) {
+      if (err) { callback(err); return; }
 
       if (stat.isDirectory()) { // Directory
 
-        fs.readdir(dir + '/' + relativePath, function(err, entries) {
+        fsReaddir(dir + '/' + relativePath, function(err, entries) {
+          if (err) { callback(err); return; }
 
           if (entries.length > 0) { // Full directory
             var entriesLeft = entries.length;
@@ -32,27 +37,43 @@ function walk(dir, options) {
                 entriesLeft -= 1;
                 if (entriesLeft === 0) {
                   processDirectory(dir, relativePath, stat, entries, function(err, result) {
-                    callback(null, result, j);
+                    if (err) { callback(err); } else { callback(null, result, j); }
                   });
                 }
               });
             };
           } else { // Empty directory
             processDirectory(dir, relativePath, stat, entries, function(err, result) {
-              callback(null, result, j);
+              if (err) { callback(err); } else { callback(null, result, j); }
             });
           }
 
         })
 
-      } else { // File
+      } else if (stat.isFile()) { // File
         processFile(dir, relativePath, stat, function(err, result) {
-          callback(null, result, j);
+          if (err) { callback(err); } else { callback(null, result, j); }
         });
       }
 
     });
   };
 
-  return RSVP.denodeify(fly)('', null)
+  return RSVP.denodeify(fly)('', null);
 };
+
+function fsReaddirSync(file, callback) {
+  try {
+    callback(null, fs.readdirSync(file));
+  } catch (err) {
+    callback(err);
+  }
+}
+
+function fsStatSync(file, callback) {
+  try {
+    callback(null, fs.statSync(file))
+  } catch (err) {
+    callback(err);
+  }
+}

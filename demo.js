@@ -2,12 +2,13 @@ var RSVP = require('rsvp'),
     walkSync = require('walk-sync'),
     walkTreeAsPromised = require('./walk-tree');
 
-var folder = __dirname + '/';
+var folder = __dirname + '/../';
 
 
 (function demo() {
   return RSVP.resolve()
   .then(runWalkSync)
+  .then(runWalkTreeAsPromisedSync)
   .then(runWalkTreeAsPromised)
   .then(demo)
 })();
@@ -24,5 +25,13 @@ function runWalkTreeAsPromised() {
   return walkTreeAsPromised(folder)
   .then(function(result) {
     console.log('walkTreeAsPromised took ' + (Date.now() - start) + ' ms for ' + result.length + ' files');
+  });
+}
+
+function runWalkTreeAsPromisedSync() {
+  var start = Date.now()
+  return walkTreeAsPromised(folder, {sync: true})
+  .then(function(result) {
+    console.log('walkTreeAsPromisedSync took ' + (Date.now() - start) + ' ms for ' + result.length + ' files');
   });
 }

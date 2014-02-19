@@ -6,7 +6,8 @@
   "main": "walk-tree.js",
   "license": "MIT",
   "dependencies": {
-    "rsvp": "~3.0.6"
+    "rsvp": "~3.0.6",
+    "graceful-fs": "~2.0.2"
   },
   "devDependencies": {
     "walk-sync": "0.0.1"
