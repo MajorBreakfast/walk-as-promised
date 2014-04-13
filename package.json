@@ -1,12 +1,12 @@
 {
   "name": "walk-tree-as-promised",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "author": "Josef Brandl",
   "description": "",
   "main": "walk-tree.js",
   "license": "MIT",
   "dependencies": {
-    "rsvp": "~3.0.6"
+    "rsvp": "^3.0.6"
   },
   "devDependencies": {
     "walk-sync": "0.0.1"
