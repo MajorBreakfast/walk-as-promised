@@ -35,7 +35,7 @@ function walk(dir, options) {
           if (entries.length > 0) { // Full directory
             var entriesLeft = entries.length;
             for (var i = 0; i < entries.length; i++) {
-              fly(relativePath + '/' + entries[i], i, function(err, subentries, i) {
+              fly(relativePath + entries[i] + '/', i, function(err, subentries, i) {
                 entries[i] = subentries;
                 entriesLeft -= 1;
                 if (entriesLeft === 0) {
